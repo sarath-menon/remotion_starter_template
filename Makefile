@@ -25,9 +25,9 @@ ifndef CONFIG_JSON
 	@exit 1
 endif
 ifdef OUTPUT
-	./scripts/export_video_full.sh '$(CONFIG_JSON)' "$(OUTPUT)" "$(PWD)"
+	./scripts/export_video_full.sh '$(CONFIG_JSON)' "$(OUTPUT)"
 else
-	./scripts/export_video_full.sh '$(CONFIG_JSON)' "video_$$(date +%s)" "$(PWD)"
+	./scripts/export_video_full.sh '$(CONFIG_JSON)' "video_$$(date +%s)"
 endif
 
 clean:
