@@ -33,9 +33,15 @@ export const DynamicVideoComposition: React.FC = () => {
   const config = inputProps.config;
   
   if (!config) {
-    return <AbsoluteFill style={{ backgroundColor: '#000', justifyContent: 'center', alignItems: 'center' }}>
-      <div style={{ color: 'white', fontSize: 48 }}>No configuration provided</div>
-    </AbsoluteFill>;
+    throw new Error('No configuration provided. Video configuration is required to render the composition.');
+  }
+
+  if (!config.composition || !config.elements) {
+    throw new Error('Invalid configuration structure. Expected config with "composition" and "elements" properties.');
+  }
+
+  if (config.elements.length === 0) {
+    throw new Error('No elements defined in configuration. At least one element is required to render the video.');
   }
 
   return (

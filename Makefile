@@ -5,12 +5,12 @@ help:
 	@echo "Available commands:"
 	@echo "  make dev          - Start Remotion Studio for development"
 	@echo "  make build        - Build the Remotion project"
-	@echo "  make export_video - Export video (requires CONFIG and optional OUTPUT)"
+	@echo "  make export_video - Export video (requires CONFIG_JSON and optional OUTPUT)"
 	@echo "  make clean        - Clean output directory and node_modules"
 	@echo ""
 	@echo "Usage examples:"
-	@echo "  make export_video CONFIG=config.json"
-	@echo "  make export_video CONFIG=config.json OUTPUT=my_video.mp4"
+	@echo "  make export_video CONFIG_JSON='{\\"composition\\":...}' OUTPUT=my_video"
+	@echo "  make export_video CONFIG_JSON='{\\"composition\\":...}'"
 
 dev:
 	npm run dev
@@ -19,15 +19,15 @@ build:
 	npm run build
 
 export_video:
-ifndef CONFIG
-	@echo "Error: CONFIG parameter is required"
-	@echo "Usage: make export_video CONFIG=path/to/config.json [OUTPUT=filename.mp4]"
+ifndef CONFIG_JSON
+	@echo "Error: CONFIG_JSON parameter is required"
+	@echo "Usage: make export_video CONFIG_JSON='{\\"composition\\":{...},\\"elements\\":[...]}' [OUTPUT=filename]"
 	@exit 1
 endif
 ifdef OUTPUT
-	./scripts/export_video.sh --config "$(CONFIG)" --output "$(OUTPUT)"
+	./scripts/export_video_full.sh '$(CONFIG_JSON)' "$(OUTPUT)" "$(PWD)"
 else
-	./scripts/export_video.sh --config "$(CONFIG)"
+	./scripts/export_video_full.sh '$(CONFIG_JSON)' "video_$$(date +%s)" "$(PWD)"
 endif
 
 clean:
