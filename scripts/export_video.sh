@@ -71,10 +71,20 @@ echo "Installing/updating dependencies..."
 npm install
 
 echo ""
-echo "Rendering video with Remotion..."
-echo "Command: npx remotion render DynamicVideoComposition \"$OUTPUT_DIR/$OUTPUT_FILE\" --props=\"$CONFIG_FILE\""
+echo "Preparing configuration..."
 
-npx remotion render DynamicVideoComposition "$OUTPUT_DIR/$OUTPUT_FILE" --props="$CONFIG_FILE"
+CONFIG_CONTENT=$(cat "$CONFIG_FILE")
+if [[ -z "$CONFIG_CONTENT" ]]; then
+    echo "❌ Error: Configuration file is empty"
+    exit 1
+fi
+
+WRAPPED_CONFIG="{\"config\": $CONFIG_CONTENT}"
+
+echo "Rendering video with Remotion..."
+echo "Command: npx remotion render DynamicComposition \"$OUTPUT_DIR/$OUTPUT_FILE\" --props='$WRAPPED_CONFIG'"
+
+npx remotion render DynamicComposition "$OUTPUT_DIR/$OUTPUT_FILE" --props="$WRAPPED_CONFIG"
 
 if [[ -f "$OUTPUT_DIR/$OUTPUT_FILE" ]]; then
     echo ""
